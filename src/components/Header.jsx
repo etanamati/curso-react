@@ -1,12 +1,14 @@
-import React from 'react'
+import {connect} from 'react-redux';
+import React from 'react';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import { Navbar, Nav, Button} from 'react-bootstrap';
 import { NavLink} from 'react-router-dom';
-
+import {usuarioLogin, usuarioLogout} from '../state/actions/UsuarioActions';
 
 const Header = (props) => {
-
-    const {currentUser, onLogin, onLogout} = props;
+    console.log('props => ', props);
+    const {currentUser, usuarioLogin, usuarioLogout} = props;
     const logado = currentUser !== undefined;
     return (
         <Navbar bg="primary" variant="dark">
@@ -17,11 +19,11 @@ const Header = (props) => {
                         <div>
                             <Button variant="light" style={{marginRight: 10}}><NavLink to="/configuracao">Configurações</NavLink></Button>
                             <Button variant="light" style={{marginRight: 10}}><NavLink to={`/perfil/${currentUser.uid}`}>Meu perfil</NavLink></Button>
-                            <Button variant="danger" onClick={onLogout}>Sair</Button>
+                            <Button variant="danger" onClick={usuarioLogout}>Sair</Button>
                         </div>
                     ) :
                     (
-                        <Button variant="success" onClick={onLogin}>Login</Button>
+                        <Button variant="success" onClick={usuarioLogin}>Login</Button>
                     )
                 }
             </Nav>
@@ -31,9 +33,15 @@ const Header = (props) => {
 
 Header.propTypes = {
     currentUser: PropTypes.object,
-    onLogin: PropTypes.func.isRequired,
-    onLogout: PropTypes.func.isRequired
+    usuarioLogin: PropTypes.func.isRequired,
+    usuarioLogout: PropTypes.func.isRequired
 }
 
+const mapStateToProps = store => ({
+  currentUser: store.usuario.usuarioAtual
+})
 
-export default Header;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ usuarioLogin, usuarioLogout }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

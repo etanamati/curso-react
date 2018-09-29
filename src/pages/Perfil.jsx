@@ -23,6 +23,11 @@ class Perfil extends Component {
     user: {}
   };
 
+  onFollow = (user) => {
+    UserService.followUser(user)
+      .then(() => console.log('Follow'));
+  }
+
   render() {
     const { user, tweets, loading } = this.state;
     const {currentUser, onFollow}= this.props;
