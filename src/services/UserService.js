@@ -16,6 +16,10 @@ const UserService = {
             return Promise.reject();
         return firebase.firestore().doc(`/users/${currentUser.uid}`).set(userData, {merge: true})
     },
+    getAllUsers: () =>
+      firebase.firestore().collection('/users')
+        .get()
+        .then(users => users.docs.map(user => user.data())),
     getUserData: (userId) =>
         firebase.firestore().doc(`/users/${userId}`).get()
             .then(user => user.data()),

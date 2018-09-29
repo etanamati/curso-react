@@ -17,7 +17,6 @@ const TweetService = {
         return firebase.firestore().collection(`/tweets`).add(parsedTweet)
     },
     getUserTweets: (user, lastTweet) => {
-
         const query = firebase.firestore().collection(`/tweets`)
             .where('author', '==', user.uid)
             .orderBy('timestamp', 'desc')

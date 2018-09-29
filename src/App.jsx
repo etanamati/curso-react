@@ -21,17 +21,17 @@ class App extends Component {
     }
   }
 
-  componentDidMount(){
-    AuthService.onAuthChange((authUser) =>{
+  componentDidMount() {
+    AuthService.onAuthChange((authUser) => {
       if (authUser) {
         UserService.getUserData(authUser.uid)
           .then((user) => {
-            this.setState({currentUser: user});
+            this.setState({ currentUser: user });
             this.getUserFeed(user);
           })
       }
       else {
-        this.setState({currentUser: undefined});
+        this.setState({ currentUser: undefined });
       }
     })
   }
@@ -41,57 +41,62 @@ class App extends Component {
   };
 
   getUserFeed = (user) => {
-    TweetService.getUserFeed(user) 
+    TweetService.getUserFeed(user)
       .then(tweets => {
-        this.setState({tweets});
+        this.setState({ tweets });
       })
   }
 
-  onPostTweet = ({content}) => {
+  onPostTweet = ({ content }) => {
     TweetService.newTweet(content)
-      .then(() => setTimeout(() => this.getUserFeed(this.state.currentUser), 1000));
+      .then(() => setTimeout(() => {
+        this.getUserFeed(this.state.currentUser);
+      }, 1000));
   }
 
   onLogout = () => {
-    this.setState({ currentUser: undefined }, () => {
-      this.props.history.push('/')
-    });
+    AuthService.logout();
   };
 
-  // onPostTweet = (tweet) => {
-  //   this.setState(state => ({
-  //     tweets: [tweet, ...state.tweets]
-  //   }))
-  // }
   onSaveConfiguracao = (updatedUser) => {
     return new Promise(resolve => {
       this.setState({
         currentUser: { ...updatedUser }
       }, () => {
-        resolve()
+        resolve();
       })
-
     })
   };
+
+  onFollow = (user) => {
+    UserService.followUser(user)
+      .then(() => console.log('Follow'));
+  }
+
+  onSaveConfiguracao = (updatedUser) => {
+    return UserService.updateUserData(updatedUser)
+      .then(() => this.setState({ currentUser: { ...updatedUser } }))
+  }
 
   render() {
     const { currentUser, tweets } = this.state;
     return (
       <div>
         <Header currentUser={currentUser} onLogin={this.onLogin}
-                onLogout={this.onLogout} />
+          onLogout={this.onLogout} />
         <Switch>
           <Route path="/" exact
-                 render={props => <Home {...props} tweets={tweets} currentUser={currentUser}
-                                        onTweet={this.onPostTweet}
-                 />}
+            render={props => <Home {...props} tweets={tweets} currentUser={currentUser}
+              onTweet={this.onPostTweet}
+            />}
           /><Route path="/perfil/:id" exact
-                   render={props => <Perfil {...props} currentUser={currentUser}
-                   />}
-        />
+            render={props => <Perfil {...props} currentUser={currentUser}
+            onFollow={this.onFollow}
+            />}
+          />
           <Route path="/configuracao" exact
-                 render={props => <Configuracoes {...props} currentUser={currentUser}
-                                                 onSave={this.onSaveConfiguracao} />}
+            render={props => <Configuracoes {...props} currentUser={currentUser}
+              onSave={this.onSaveConfiguracao} />}
           />
           <Route component={NotFound} />
         </Switch>
