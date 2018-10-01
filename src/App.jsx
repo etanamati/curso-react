@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-
-import './App.css';
+import {Provider} from 'react-redux';
+import AuthService from './services/AuthService';
+import Configuracoes from './pages/Configuracoes'
+import createStore from './createStore';
 import Header from './components/Header';
 import Home from './pages/Home';
-import Perfil from './pages/Perfil';
-import Configuracoes from './pages/Configuracoes'
 import NotFound from './pages/NotFound';
+import Perfil from './pages/Perfil';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import AuthService from './services/AuthService';
-import UserService from './services/UserService';
-import TweetService from './services/TweetService';
-import createStore from './createStore';
-import {Provider} from 'react-redux';
 import {usuarioLogin, usuarioLogout} from './state/actions/UsuarioActions';
+
+import './App.css';
 
 const store = createStore({});
 

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {ListGroup} from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import React from 'react';
 import User from './User';
 
 const UserList = props => {

@@ -1,6 +1,6 @@
-import {applyMiddleware, createStore, compose} from 'redux';
-import promiseMiddleware from 'redux-promise';
+import {applyMiddleware, createStore,} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import promiseMiddleware from 'redux-promise';
 import rootReducer from './state';
 
 export default (initialState) => {

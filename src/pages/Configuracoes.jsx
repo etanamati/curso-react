@@ -1,4 +1,3 @@
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';

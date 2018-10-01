@@ -1,9 +1,9 @@
 import {connect} from 'react-redux';
-import React from 'react';
 import {bindActionCreators} from 'redux';
-import PropTypes from 'prop-types';
 import { Navbar, Nav, Button} from 'react-bootstrap';
 import { NavLink} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {usuarioLogin, usuarioLogout} from '../state/actions/UsuarioActions';
 
 const Header = (props) => {
