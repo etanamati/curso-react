@@ -7,9 +7,8 @@ import { NavLink} from 'react-router-dom';
 import {usuarioLogin, usuarioLogout} from '../state/actions/UsuarioActions';
 
 const Header = (props) => {
-    console.log('props => ', props);
-    const {currentUser, usuarioLogin, usuarioLogout} = props;
-    const logado = currentUser !== undefined;
+    const {usuarioLogado, usuarioLogin, usuarioLogout} = props;
+    const logado = usuarioLogado !== undefined;
     return (
         <Navbar bg="primary" variant="dark">
            <NavLink to="/" className="navbar-brand">Twitter</NavLink>
@@ -18,7 +17,7 @@ const Header = (props) => {
                     logado ? (
                         <div>
                             <Button variant="light" style={{marginRight: 10}}><NavLink to="/configuracao">Configurações</NavLink></Button>
-                            <Button variant="light" style={{marginRight: 10}}><NavLink to={`/perfil/${currentUser.uid}`}>Meu perfil</NavLink></Button>
+                            <Button variant="light" style={{marginRight: 10}}><NavLink to={`/perfil/${usuarioLogado.uid}`}>Meu perfil</NavLink></Button>
                             <Button variant="danger" onClick={usuarioLogout}>Sair</Button>
                         </div>
                     ) :
@@ -32,13 +31,13 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-    currentUser: PropTypes.object,
+    usuarioLogado: PropTypes.object,
     usuarioLogin: PropTypes.func.isRequired,
     usuarioLogout: PropTypes.func.isRequired
 }
 
 const mapStateToProps = store => ({
-  currentUser: store.usuario.usuarioAtual
+  usuarioLogado: store.usuario.usuarioAtual
 })
 
 const mapDispatchToProps = dispatch =>

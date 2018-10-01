@@ -17,15 +17,6 @@ import {usuarioLogin, usuarioLogout} from './state/actions/UsuarioActions';
 const store = createStore({});
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentUser: undefined,
-      tweets: []
-    }
-  }
-
   componentDidMount() {
     AuthService.onAuthChange((authUser) => {
       if (authUser) {
@@ -37,50 +28,7 @@ class App extends Component {
     })
   }
 
-  onLogin = () => {
-    AuthService.loginWithGoogle();
-  };
-
-  getUserFeed = (user) => {
-    TweetService.getUserFeed(user)
-      .then(tweets => {
-        this.setState({ tweets });
-      })
-  }
-
-  onPostTweet = ({ content }) => {
-    TweetService.newTweet(content)
-      .then(() => setTimeout(() => {
-        this.getUserFeed(this.state.currentUser);
-      }, 1000));
-  }
-
-  onLogout = () => {
-    AuthService.logout();
-  };
-
-  onSaveConfiguracao = (updatedUser) => {
-    return new Promise(resolve => {
-      this.setState({
-        currentUser: { ...updatedUser }
-      }, () => {
-        resolve();
-      })
-    })
-  };
-
-  onFollow = (user) => {
-    UserService.followUser(user)
-      .then(() => console.log('Follow'));
-  }
-
-  onSaveConfiguracao = (updatedUser) => {
-    return UserService.updateUserData(updatedUser)
-      .then(() => this.setState({ currentUser: { ...updatedUser } }))
-  }
-
   render() {
-    const { currentUser, tweets } = this.state;
     return (
       <div>
         <Provider store={store}>
@@ -88,11 +36,7 @@ class App extends Component {
             <Header />
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/perfil/:id" exact
-                render={props => <Perfil {...props} currentUser={currentUser}
-                onFollow={this.onFollow}
-                />}
-              />
+              <Route path="/perfil/:id" exact component={Perfil}/>
               <Route path="/configuracao" exact component={Configuracoes} />
               <Route component={NotFound} />
             </Switch>

@@ -1,3 +1,4 @@
+import {connect} from 'react-redux';
 import React, { Component } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
 import ListaTweet from '../components/ListaTweet';
@@ -8,7 +9,6 @@ import TweetService from '../services/TweetService';
 class Perfil extends Component {
   componentDidMount() {
     const { id } = this.props.match.params;
-
     this.setState({ loading: true }, () => {
       UserService.getUserData(id)
         .then(user => {
@@ -18,6 +18,7 @@ class Perfil extends Component {
         .then(tweets => this.setState({tweets, loading: false}));
     });
   }
+
   state = {
     tweets: [],
     user: {}
@@ -30,7 +31,7 @@ class Perfil extends Component {
 
   render() {
     const { user, tweets, loading } = this.state;
-    const {currentUser, onFollow}= this.props;
+    const {usuarioLogado}= this.props;
     if (loading){
       return (
         <div className="lds-container">
@@ -38,7 +39,7 @@ class Perfil extends Component {
         </div>
       )
     }
-    const shouldShowFollowButton = currentUser !== undefined && currentUser.uid !== user.uid;
+    const shouldShowFollowButton = usuarioLogado !== undefined && usuarioLogado.uid !== user.uid;
 
     return (
       <Container>
@@ -51,7 +52,7 @@ class Perfil extends Component {
           </div>
           {(shouldShowFollowButton) &&
             <div className="ml-auto">
-              <Button onClick={() => onFollow(user)}>Seguir</Button>
+              <Button onClick={() => this.onFollow(user)}>Seguir</Button>
             </div>
           }
         </Row>
@@ -63,4 +64,10 @@ class Perfil extends Component {
   }
 }
 
-export default Perfil;
+const mapStateToProps = state => {
+  return {
+    usuarioLogado: state.usuario.usuarioAtual
+  }
+}
+
+export default connect(mapStateToProps)(Perfil);
