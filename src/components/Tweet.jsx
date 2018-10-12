@@ -1,8 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import {Col, Row, ListGroup} from 'react-bootstrap';
 import {NavLink} from 'react-router-dom';
-
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const formatter = new Intl.DateTimeFormat('pt-BR',{
     year: 'numeric',

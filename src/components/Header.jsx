@@ -1,13 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import { Navbar, Nav, Button} from 'react-bootstrap';
 import { NavLink} from 'react-router-dom';
-
+import PropTypes from 'prop-types';
+import React from 'react';
+import {usuarioLogin, usuarioLogout} from '../state/actions/UsuarioActions';
 
 const Header = (props) => {
-
-    const {currentUser, onLogin, onLogout} = props;
-    const logado = currentUser !== undefined;
+    const {usuarioLogado, usuarioLogin, usuarioLogout} = props;
+    const logado = usuarioLogado !== undefined;
     return (
         <Navbar bg="primary" variant="dark">
            <NavLink to="/" className="navbar-brand">Twitter</NavLink>
@@ -16,12 +17,12 @@ const Header = (props) => {
                     logado ? (
                         <div>
                             <Button variant="light" style={{marginRight: 10}}><NavLink to="/configuracao">Configurações</NavLink></Button>
-                            <Button variant="light" style={{marginRight: 10}}><NavLink to={`/perfil/${currentUser.uid}`}>Meu perfil</NavLink></Button>
-                            <Button variant="danger" onClick={onLogout}>Sair</Button>
+                            <Button variant="light" style={{marginRight: 10}}><NavLink to={`/perfil/${usuarioLogado.uid}`}>Meu perfil</NavLink></Button>
+                            <Button variant="danger" onClick={usuarioLogout}>Sair</Button>
                         </div>
                     ) :
                     (
-                        <Button variant="success" onClick={onLogin}>Login</Button>
+                        <Button variant="success" onClick={usuarioLogin}>Login</Button>
                     )
                 }
             </Nav>
@@ -30,10 +31,16 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-    currentUser: PropTypes.object,
-    onLogin: PropTypes.func.isRequired,
-    onLogout: PropTypes.func.isRequired
+    usuarioLogado: PropTypes.object,
+    usuarioLogin: PropTypes.func.isRequired,
+    usuarioLogout: PropTypes.func.isRequired
 }
 
+const mapStateToProps = store => ({
+  usuarioLogado: store.usuario.usuarioAtual
+})
 
-export default Header;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ usuarioLogin, usuarioLogout }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
